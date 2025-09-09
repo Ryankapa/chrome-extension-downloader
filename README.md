@@ -1,61 +1,137 @@
 # Chrome Extension Downloader
 
-A **Python 3** tool that automatically downloads Chrome extensions from the Chrome Web Store, converts them from CRX to ZIP format, and cleans up temporary files.
+A **comprehensive Python 3.7+** tool that automatically downloads Chrome extensions from the Chrome Web Store, converts them from CRX to ZIP format, and provides advanced features like batch downloads, configuration management, caching, and comprehensive logging.
+
+## ✨ Features
+
+- 🚀 **Single & Batch Downloads**: Download one or multiple extensions simultaneously
+- ⚙️ **Configuration Management**: JSON-based configuration with sensible defaults
+- 🔄 **Concurrent Processing**: Multi-threaded downloads with configurable limits
+- 💾 **Caching System**: Avoid re-downloading the same extensions
+- 📊 **Progress Tracking**: Real-time download progress with file size information
+- 🛡️ **Security Features**: SSL verification, file validation, and rate limiting
+- 📝 **Comprehensive Logging**: Detailed logging with multiple levels
+- 🎯 **Interactive Mode**: User-friendly interface for non-technical users
+- 🐳 **Docker Support**: Containerized deployment ready
+- 🧪 **Complete Test Suite**: Comprehensive unit and integration tests
 
 ## 🚀 Quick Start
 
-### **Step 1: Install Requirements (REQUIRED FIRST)**
+### **Step 1: Install Requirements**
 ```bash
 pip install -r requirements.txt
 ```
 
 ### **Step 2: Download Extension**
 ```bash
+# Single extension
 python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg
+
+# Multiple extensions
+python chrome_extension_downloader.py --batch gppongmhjkpfnbhagpmjfkannfbllamg nkeimhogjdpnpccoofpliimaahmaaome
+
+# Interactive mode
+python chrome_extension_downloader.py --interactive
 ```
 
-This single command will:
-1. Download the extension as a CRX file
-2. Convert it to ZIP format
-3. Delete the temporary CRX file
-4. Give you a ready-to-use ZIP file
+This will:
+1. Download the extension(s) as CRX file(s)
+2. Convert to ZIP format
+3. Validate file integrity
+4. Clean up temporary files
+5. Provide detailed progress and logging
 
-## 📁 Files
+## 📁 Project Structure
 
-- **`chrome_extension_downloader.py`** - **MAIN SCRIPT** - Automated tool that downloads extensions, converts CRX to ZIP, and cleans up files automatically
-- **`crx_utils.py`** - **UTILITY LIBRARY** - Core functions for URL building and CRX conversion (used by main script)
-- **`requirements.txt`** - **DEPENDENCIES** - Python packages needed to run the scripts
-- **`README.md`** - **DOCUMENTATION** - This file with usage instructions
+```
+chrome-extension-downloader/
+├── chrome_extension_downloader.py    # Main script with enhanced features
+├── crx_utils.py                      # Core utilities for CRX handling
+├── test_chrome_extension_downloader.py # Comprehensive test suite
+├── setup.py                          # Package setup and distribution
+├── requirements.txt                  # Python dependencies
+├── config.json                       # Default configuration file
+├── sample_extensions.txt             # Sample extension list file
+├── Makefile                          # Development and build commands
+├── Dockerfile                        # Docker containerization
+├── .github/workflows/ci.yml          # CI/CD pipeline
+├── README.md                         # This documentation
+├── API_DOCUMENTATION.md              # Detailed API reference
+└── LICENSE                           # MIT License
+```
 
 ## 🛠️ Usage
 
-### **Main Script (Automated) - RECOMMENDED**
+### **Command Line Interface**
 
-**What it does:** Downloads extension, converts CRX to ZIP, and cleans up automatically
-
+#### **Single Extension Download**
 ```bash
-# Basic usage - download and convert
+# Basic download
 python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg
 
 # With custom output filename
 python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output wappalyzer.zip
 
-# With full output path (including directory)
-python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output-path "C:\Users\test\Desktop\wappalyzer.zip"
+# To specific directory
+python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output-dir /path/to/downloads
 
-# Keep the CRX file (don't delete it)
+# Keep CRX file (don't delete)
 python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --keep-crx
 
-# Verbose output (shows detailed progress)
+# Verbose output
 python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --verbose
 ```
 
-### **Utility Script (Manual Operations) - ADVANCED**
+#### **Batch Downloads**
+```bash
+# Multiple extensions
+python chrome_extension_downloader.py --batch gppongmhjkpfnbhagpmjfkannfbllamg nkeimhogjdpnpccoofpliimaahmaaome
 
-**What it does:** Provides individual functions for URL generation and CRX conversion
+# From file
+python chrome_extension_downloader.py --from-file sample_extensions.txt
+
+# High performance batch download
+python chrome_extension_downloader.py --batch <id1> <id2> <id3> --max-workers 10
+```
+
+#### **Interactive Mode**
+```bash
+# User-friendly interface
+python chrome_extension_downloader.py --interactive
+```
+
+#### **Configuration**
+```bash
+# Create sample config
+python chrome_extension_downloader.py --create-config
+
+# Use custom config
+python chrome_extension_downloader.py <extension_id> --config my_config.json
+```
+
+### **Python API**
+
+```python
+from chrome_extension_downloader import AutoExtensionDownloader, Config
+
+# Basic usage
+downloader = AutoExtensionDownloader()
+result = downloader.download_and_convert("gppongmhjkpfnbhagpmjfkannfbllamg")
+
+# Batch download
+extension_ids = ["gppongmhjkpfnbhagpmjfkannfbllamg", "nkeimhogjdpnpccoofpliimaahmaaome"]
+results = downloader.download_multiple(extension_ids)
+
+# Custom configuration
+config = Config("my_config.json")
+config.config["performance"]["max_concurrent_downloads"] = 5
+downloader = AutoExtensionDownloader(config)
+```
+
+### **Utility Script (Advanced)**
 
 ```bash
-# Generate download URL only (doesn't download)
+# Generate download URL only
 python crx_utils.py --id gppongmhjkpfnbhagpmjfkannfbllamg
 
 # Convert existing CRX file to ZIP
@@ -67,31 +143,46 @@ python crx_utils.py --url "https://chrome.google.com/webstore/detail/extension-n
 
 ## 📋 Requirements
 
-- **Python 3.6+** (Python 2 is not supported)
+- **Python 3.7+** (uses modern typing features)
 - Required packages (see `requirements.txt`)
 
-### **Installation (REQUIRED BEFORE USE)**
+### **Installation**
 
-1. **Ensure you have Python 3.6+ installed**
-   ```bash
-   python --version  # Should show Python 3.x.x
-   ```
+#### **From Source**
+```bash
+# Clone repository
+git clone https://github.com/your-username/chrome-extension-downloader.git
+cd chrome-extension-downloader
 
-2. **Clone or download** this repository
+# Install dependencies
+pip install -r requirements.txt
+```
 
-3. **Install dependencies FIRST:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+#### **As Package (when published to PyPI)**
+```bash
+pip install chrome-extension-downloader
+```
 
-   Or install manually:
-   ```bash
-   pip install requests urllib3
-   ```
+#### **Development Setup**
+```bash
+# Install development dependencies
+make install-dev
 
-**⚠️ Important:** 
-- You must have **Python 3.6+** installed
-- You must install the requirements before running any scripts!
+# Run tests
+make test
+
+# Run all development checks
+make dev-test
+```
+
+#### **Docker**
+```bash
+# Build Docker image
+docker build -t chrome-extension-downloader .
+
+# Run container
+docker run -it --rm -v $(pwd)/downloads:/app/downloads chrome-extension-downloader
+```
 
 ## 🔍 How to Find Extension IDs
 
@@ -104,15 +195,42 @@ python crx_utils.py --url "https://chrome.google.com/webstore/detail/extension-n
 - URL: `https://chrome.google.com/webstore/detail/wappalyzer-technology-profiler/gppongmhjkpfnbhagpmjfkannfbllamg`
 - Extension ID: `gppongmhjkpfnbhagpmjfkannfbllamg`
 
-## ⚙️ Features
+## ⚙️ Advanced Features
 
+### **Download Management**
 - **Automatic Download**: Downloads CRX files directly from Google's servers
 - **CRX to ZIP Conversion**: Converts Chrome extension files to standard ZIP format
+- **Batch Processing**: Download multiple extensions simultaneously
+- **Concurrent Downloads**: Multi-threaded downloads with configurable limits
+- **Caching System**: Avoid re-downloading the same extensions
+- **Resume Support**: Handle interrupted downloads gracefully
+
+### **Configuration & Customization**
+- **JSON Configuration**: Comprehensive configuration management
+- **Environment Detection**: Auto-detects your system (Windows, macOS, Linux)
+- **Custom Output**: Flexible output directory and filename options
+- **Performance Tuning**: Configurable chunk sizes, timeouts, and retry logic
+
+### **Security & Validation**
+- **SSL Verification**: Configurable SSL certificate validation
+- **File Validation**: Extension ID format validation
+- **Integrity Checks**: ZIP file integrity verification
+- **Rate Limiting**: Respectful request throttling
+- **Size Limits**: Configurable file size restrictions
+
+### **User Experience**
+- **Progress Tracking**: Real-time download progress with file size information
+- **Interactive Mode**: User-friendly interface for non-technical users
+- **Comprehensive Logging**: Detailed logging with multiple levels
+- **Error Handling**: Graceful error handling with detailed messages
 - **Auto Cleanup**: Removes temporary CRX files after conversion
-- **Progress Indicators**: Shows download progress and file information
-- **Error Handling**: Graceful error handling with cleanup
-- **Platform Detection**: Auto-detects your system (Windows, macOS, Linux)
+
+### **Technical Features**
 - **Multiple Formats**: Supports both CRX2 and CRX3 formats
+- **Platform Detection**: Auto-detects your system architecture
+- **Type Hints**: Full type annotation support
+- **Test Coverage**: Comprehensive unit and integration tests
+- **Docker Support**: Containerized deployment ready
 
 ## 🎯 Examples
 
@@ -170,10 +288,95 @@ python crx_utils.py --convert downloaded_extension.crx
 
 This tool is for educational and personal use. Please respect Chrome Web Store terms of service and extension developers' rights.
 
+## 🧪 Development
+
+### **Running Tests**
+```bash
+# Run all tests
+make test
+
+# Run with coverage
+make test-cov
+
+# Run specific test
+python -m pytest test_chrome_extension_downloader.py::TestConfig::test_default_config -v
+```
+
+### **Code Quality**
+```bash
+# Format code
+make format
+
+# Run linting
+make lint
+
+# Run all checks
+make dev-test
+```
+
+### **Building & Distribution**
+```bash
+# Build package
+make build
+
+# Create distribution
+make dist
+
+# Clean build artifacts
+make clean
+```
+
+### **Docker Development**
+```bash
+# Build Docker image
+docker build -t chrome-extension-downloader .
+
+# Run with volume mount
+docker run -it --rm -v $(pwd)/downloads:/app/downloads chrome-extension-downloader
+```
+
+## 📊 Project Status
+
+- ✅ **Core Functionality**: Download and convert extensions
+- ✅ **Batch Downloads**: Multiple extensions simultaneously  
+- ✅ **Configuration System**: JSON-based configuration
+- ✅ **Security Features**: SSL verification, validation, rate limiting
+- ✅ **Performance**: Concurrent downloads, caching, streaming
+- ✅ **User Experience**: Interactive mode, progress tracking, logging
+- ✅ **Testing**: Comprehensive test suite
+- ✅ **Documentation**: Complete API documentation
+- ✅ **Packaging**: Setup.py, Docker, CI/CD
+- 🔄 **Future**: GUI interface, extension search, update detection
+
 ## 🤝 Contributing
 
-Feel free to submit issues or pull requests to improve this tool.
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### **Development Workflow**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Add tests for new functionality
+5. Run the test suite (`make test`)
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
+
+### **Reporting Issues**
+- Use the GitHub issue tracker
+- Include Python version, OS, and error details
+- Provide steps to reproduce the issue
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Based on the CRX Viewer extension functionality
+- Uses the same underlying logic for reliable CRX to ZIP conversion
+- Inspired by the Chrome Web Store's internal APIs
 
 ---
 
-**Note:** This tool replicates the functionality of the CRX Viewer extension and uses the same underlying logic for reliable CRX to ZIP conversion.
+**Note:** This tool replicates and enhances the functionality of the CRX Viewer extension with modern Python features, comprehensive testing, and professional-grade tooling.

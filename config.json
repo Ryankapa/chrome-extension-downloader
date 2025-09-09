@@ -1,0 +1,26 @@
+{
+  "download": {
+    "max_file_size_mb": 100,
+    "timeout_seconds": 30,
+    "retry_attempts": 3,
+    "retry_delay_seconds": 2,
+    "verify_ssl": true,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  },
+  "output": {
+    "default_directory": "./downloads",
+    "auto_cleanup": true,
+    "create_subdirectories": true
+  },
+  "performance": {
+    "max_concurrent_downloads": 3,
+    "chunk_size": 8192,
+    "enable_caching": true,
+    "cache_directory": "./cache"
+  },
+  "security": {
+    "validate_extension_id": true,
+    "check_file_integrity": true,
+    "rate_limit_delay": 1.0
+  }
+}

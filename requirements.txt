@@ -1,12 +1,21 @@
 # Chrome Extension Downloader Requirements
-# Python 3 packages needed to run the Chrome extension downloader
-# Requires Python 3.6+ (Python 2 is not supported)
+# Python 3 packages needed to run the enhanced Chrome extension downloader
+# Requires Python 3.7+ (uses modern typing features)
 
 # HTTP requests library for downloading CRX files
 requests>=2.25.0
 
 # SSL/TLS handling and warnings suppression
 urllib3>=1.26.0
+
+# Enhanced terminal output and progress bars
+colorama>=0.4.4
+
+# Configuration file handling (optional, falls back to JSON)
+pyyaml>=6.0
+
+# Type checking support (optional, for development)
+typing-extensions>=4.0.0
 
 # Note: The following are built-in Python modules and don't need to be installed:
 # - argparse (command line argument parsing)
@@ -17,3 +26,9 @@ urllib3>=1.26.0
 # - struct (binary data handling)
 # - zipfile (ZIP file operations)
 # - os (operating system interface)
+# - logging (logging system)
+# - json (JSON handling)
+# - time (time utilities)
+# - pathlib (path handling)
+# - typing (type hints)
+# - concurrent.futures (threading support)
