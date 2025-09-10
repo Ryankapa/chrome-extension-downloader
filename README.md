@@ -1,6 +1,6 @@
 # Chrome Extension Downloader
 
-A **comprehensive Python 3.7+** tool that automatically downloads Chrome extensions from the Chrome Web Store, converts them from CRX to ZIP format, and provides advanced features like batch downloads, configuration management, caching, and comprehensive logging.
+A **simple Python 3.7+** tool that automatically downloads Chrome extensions from the Chrome Web Store, converts them from CRX to ZIP format, with automatic SSL bypass for better compatibility.
 
 ## ✨ Features
 
@@ -9,11 +9,9 @@ A **comprehensive Python 3.7+** tool that automatically downloads Chrome extensi
 - 🔄 **Concurrent Processing**: Multi-threaded downloads with configurable limits
 - 💾 **Caching System**: Avoid re-downloading the same extensions
 - 📊 **Progress Tracking**: Real-time download progress with file size information
-- 🛡️ **Security Features**: SSL verification, file validation, and rate limiting
+- 🔓 **Automatic SSL Bypass**: Works in corporate environments with SSL issues
 - 📝 **Comprehensive Logging**: Detailed logging with multiple levels
 - 🎯 **Interactive Mode**: User-friendly interface for non-technical users
-- 🐳 **Docker Support**: Containerized deployment ready
-- 🧪 **Complete Test Suite**: Comprehensive unit and integration tests
 
 ## 🚀 Quick Start
 
@@ -45,18 +43,11 @@ This will:
 
 ```
 chrome-extension-downloader/
-├── chrome_extension_downloader.py    # Main script with enhanced features
+├── chrome_extension_downloader.py    # Main script
 ├── crx_utils.py                      # Core utilities for CRX handling
-├── test_chrome_extension_downloader.py # Comprehensive test suite
-├── setup.py                          # Package setup and distribution
 ├── requirements.txt                  # Python dependencies
 ├── config.json                       # Default configuration file
-├── sample_extensions.txt             # Sample extension list file
-├── Makefile                          # Development and build commands
-├── Dockerfile                        # Docker containerization
-├── .github/workflows/ci.yml          # CI/CD pipeline
 ├── README.md                         # This documentation
-├── API_DOCUMENTATION.md              # Detailed API reference
 └── LICENSE                           # MIT License
 ```
 
@@ -87,8 +78,8 @@ python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --verbose
 # Multiple extensions
 python chrome_extension_downloader.py --batch gppongmhjkpfnbhagpmjfkannfbllamg nkeimhogjdpnpccoofpliimaahmaaome
 
-# From file
-python chrome_extension_downloader.py --from-file sample_extensions.txt
+# From file (create your own extension list)
+python chrome_extension_downloader.py --from-file extensions.txt
 
 # High performance batch download
 python chrome_extension_downloader.py --batch <id1> <id2> <id3> --max-workers 10
@@ -158,30 +149,10 @@ cd chrome-extension-downloader
 pip install -r requirements.txt
 ```
 
-#### **As Package (when published to PyPI)**
+#### **Simple Usage**
 ```bash
-pip install chrome-extension-downloader
-```
-
-#### **Development Setup**
-```bash
-# Install development dependencies
-make install-dev
-
-# Run tests
-make test
-
-# Run all development checks
-make dev-test
-```
-
-#### **Docker**
-```bash
-# Build Docker image
-docker build -t chrome-extension-downloader .
-
-# Run container
-docker run -it --rm -v $(pwd)/downloads:/app/downloads chrome-extension-downloader
+# Just run the script directly - no installation needed!
+python chrome_extension_downloader.py <extension_id>
 ```
 
 ## 🔍 How to Find Extension IDs
@@ -212,7 +183,7 @@ docker run -it --rm -v $(pwd)/downloads:/app/downloads chrome-extension-download
 - **Performance Tuning**: Configurable chunk sizes, timeouts, and retry logic
 
 ### **Security & Validation**
-- **SSL Verification**: Configurable SSL certificate validation
+- **Automatic SSL Bypass**: Works in corporate environments with SSL issues
 - **File Validation**: Extension ID format validation
 - **Integrity Checks**: ZIP file integrity verification
 - **Rate Limiting**: Respectful request throttling
@@ -229,8 +200,7 @@ docker run -it --rm -v $(pwd)/downloads:/app/downloads chrome-extension-download
 - **Multiple Formats**: Supports both CRX2 and CRX3 formats
 - **Platform Detection**: Auto-detects your system architecture
 - **Type Hints**: Full type annotation support
-- **Test Coverage**: Comprehensive unit and integration tests
-- **Docker Support**: Containerized deployment ready
+- **SSL Compatibility**: Automatic SSL bypass for corporate environments
 
 ## 🎯 Examples
 
@@ -281,8 +251,8 @@ python crx_utils.py --convert downloaded_extension.crx
 - Check the URL format from Chrome Web Store
 
 **SSL Certificate Errors:**
-- The script automatically handles SSL verification issues
-- If problems persist, check your network/firewall settings
+- SSL verification is automatically disabled for better compatibility
+- The script works in corporate environments with SSL restrictions
 
 ## 📝 License
 
@@ -290,77 +260,34 @@ This tool is for educational and personal use. Please respect Chrome Web Store t
 
 ## 🧪 Development
 
-### **Running Tests**
-```bash
-# Run all tests
-make test
+This is a simple, lightweight tool focused on core functionality. For development:
 
-# Run with coverage
-make test-cov
-
-# Run specific test
-python -m pytest test_chrome_extension_downloader.py::TestConfig::test_default_config -v
-```
-
-### **Code Quality**
-```bash
-# Format code
-make format
-
-# Run linting
-make lint
-
-# Run all checks
-make dev-test
-```
-
-### **Building & Distribution**
-```bash
-# Build package
-make build
-
-# Create distribution
-make dist
-
-# Clean build artifacts
-make clean
-```
-
-### **Docker Development**
-```bash
-# Build Docker image
-docker build -t chrome-extension-downloader .
-
-# Run with volume mount
-docker run -it --rm -v $(pwd)/downloads:/app/downloads chrome-extension-downloader
-```
+1. Clone the repository
+2. Install requirements: `pip install -r requirements.txt`
+3. Run the script: `python chrome_extension_downloader.py <extension_id>`
 
 ## 📊 Project Status
 
 - ✅ **Core Functionality**: Download and convert extensions
 - ✅ **Batch Downloads**: Multiple extensions simultaneously  
 - ✅ **Configuration System**: JSON-based configuration
-- ✅ **Security Features**: SSL verification, validation, rate limiting
+- ✅ **SSL Compatibility**: Automatic SSL bypass for corporate environments
 - ✅ **Performance**: Concurrent downloads, caching, streaming
 - ✅ **User Experience**: Interactive mode, progress tracking, logging
-- ✅ **Testing**: Comprehensive test suite
-- ✅ **Documentation**: Complete API documentation
-- ✅ **Packaging**: Setup.py, Docker, CI/CD
-- 🔄 **Future**: GUI interface, extension search, update detection
+- ✅ **Documentation**: Complete usage documentation
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions! 
 
 ### **Development Workflow**
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite (`make test`)
-6. Commit your changes (`git commit -m 'Add amazing feature'`)
-7. Push to the branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
+4. Test your changes
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ### **Reporting Issues**
 - Use the GitHub issue tracker
@@ -379,4 +306,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note:** This tool replicates and enhances the functionality of the CRX Viewer extension with modern Python features, comprehensive testing, and professional-grade tooling.
+**Note:** This tool replicates and enhances the functionality of the CRX Viewer extension with modern Python features and automatic SSL bypass for better compatibility.
