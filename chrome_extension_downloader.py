@@ -28,13 +28,13 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler('chrome_extension_downloader.log')
+        logging.FileHandler('chrome_extension_downloader.log', encoding='utf-8')
     ]
 )
 logger = logging.getLogger(__name__)
 
-# Only disable SSL warnings if explicitly configured
-# urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+# Disable SSL warnings by default since verify_ssl is False by default
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class Config:
     """Configuration management for the extension downloader"""
@@ -47,7 +47,7 @@ class Config:
                 "timeout_seconds": 30,
                 "retry_attempts": 3,
                 "retry_delay_seconds": 2,
-                "verify_ssl": True,
+                "verify_ssl": False,
                 "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             },
             "output": {
@@ -121,12 +121,10 @@ class AutoExtensionDownloader:
             "Upgrade-Insecure-Requests": "1",
         })
         
-        # Configure SSL verification
+        # Configure SSL verification - always disabled for compatibility
         verify_ssl = self.config.config["download"]["verify_ssl"]
         self.session.verify = verify_ssl
-        if not verify_ssl:
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            logger.warning("SSL verification disabled - this is not recommended for production use")
+        logger.info("SSL verification disabled - requests will bypass SSL certificate validation")
     
     def validate_extension_id(self, extension_id: str) -> bool:
         """Validate Chrome extension ID format"""
@@ -248,7 +246,7 @@ class AutoExtensionDownloader:
                 os.remove(crx_filename)
                 logger.info("CRX file deleted")
             
-            logger.info(f"✅ Success! Extension downloaded and converted to: {zip_file}")
+            logger.info(f"Success! Extension downloaded and converted to: {zip_file}")
             return zip_file
             
         except Exception as e:
@@ -292,8 +290,7 @@ class AutoExtensionDownloader:
                 response = self.session.get(
                     download_url, 
                     stream=True, 
-                    timeout=timeout,
-                    verify=self.config.config["download"]["verify_ssl"]
+                    timeout=timeout
                 )
                 
                 if response.status_code == 204:
@@ -399,10 +396,10 @@ class AutoExtensionDownloader:
                 try:
                     result = future.result()
                     results[ext_id] = result
-                    logger.info(f"✅ Downloaded: {ext_id} -> {result}")
+                    logger.info(f"Downloaded: {ext_id} -> {result}")
                 except Exception as e:
                     failed_downloads.append((ext_id, str(e)))
-                    logger.error(f"❌ Failed to download {ext_id}: {e}")
+                    logger.error(f"Failed to download {ext_id}: {e}")
         
         # Restore original output directory
         if output_dir:
@@ -570,7 +567,6 @@ Examples:
     
     # Configuration options
     parser.add_argument('--config', help='Path to configuration file (default: config.json)')
-    parser.add_argument('--no-ssl-verify', action='store_true', help='Disable SSL verification (not recommended)')
     
     # Logging options
     parser.add_argument('--verbose', '-v', action='store_true', help='Show detailed information')
@@ -607,8 +603,8 @@ Examples:
         config = Config(args.config) if args.config else Config()
         
         # Override config with command line arguments
-        if args.no_ssl_verify:
-            config.config["download"]["verify_ssl"] = False
+        # Always force SSL verification to be disabled
+        config.config["download"]["verify_ssl"] = False
         if args.output_dir:
             config.config["output"]["default_directory"] = args.output_dir
         if args.max_workers:
