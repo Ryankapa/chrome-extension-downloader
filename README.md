@@ -64,7 +64,7 @@ python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg
 python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output wappalyzer.zip
 
 # To specific directory
-python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output-dir /path/to/downloads
+python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output-dir ./my_downloads
 
 # Keep CRX file (don't delete)
 python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --keep-crx
@@ -82,7 +82,7 @@ python chrome_extension_downloader.py --batch gppongmhjkpfnbhagpmjfkannfbllamg n
 python chrome_extension_downloader.py --from-file extensions.txt
 
 # High performance batch download
-python chrome_extension_downloader.py --batch <id1> <id2> <id3> --max-workers 10
+python chrome_extension_downloader.py --batch gppongmhjkpfnbhagpmjfkannfbllamg nkeimhogjdpnpccoofpliimaahmaaome --max-workers 5
 ```
 
 #### **Interactive Mode**
@@ -100,24 +100,6 @@ python chrome_extension_downloader.py --create-config
 python chrome_extension_downloader.py <extension_id> --config my_config.json
 ```
 
-### **Python API**
-
-```python
-from chrome_extension_downloader import AutoExtensionDownloader, Config
-
-# Basic usage
-downloader = AutoExtensionDownloader()
-result = downloader.download_and_convert("gppongmhjkpfnbhagpmjfkannfbllamg")
-
-# Batch download
-extension_ids = ["gppongmhjkpfnbhagpmjfkannfbllamg", "nkeimhogjdpnpccoofpliimaahmaaome"]
-results = downloader.download_multiple(extension_ids)
-
-# Custom configuration
-config = Config("my_config.json")
-config.config["performance"]["max_concurrent_downloads"] = 5
-downloader = AutoExtensionDownloader(config)
-```
 
 ### **Utility Script (Advanced)**
 
@@ -130,6 +112,9 @@ python crx_utils.py --convert extension.crx
 
 # From Chrome Web Store URL
 python crx_utils.py --url "https://chrome.google.com/webstore/detail/extension-name/gppongmhjkpfnbhagpmjfkannfbllamg"
+
+# With custom platform settings
+python crx_utils.py --id gppongmhjkpfnbhagpmjfkannfbllamg --os linux --arch x86-64 --prodversion 120.0.6099.109
 ```
 
 ## 📋 Requirements
@@ -223,7 +208,7 @@ python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output 
 
 ### **Download to Specific Directory**
 ```bash
-python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output-path "C:\Users\test\Desktop\wappalyzer.zip"
+python chrome_extension_downloader.py gppongmhjkpfnbhagpmjfkannfbllamg --output-dir ./my_downloads
 ```
 
 ### **Convert Existing CRX File**
