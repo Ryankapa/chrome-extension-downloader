@@ -624,7 +624,7 @@ Examples:
             print(f"SSL verification: {config.config['download']['verify_ssl']}")
             print("-" * 50)
         
-        # Handle different input types
+        #  Handle different input types
         if args.extension_id:
             # Single extension download
             if not downloader.validate_extension_id(args.extension_id):
